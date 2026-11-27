@@ -1,11 +1,18 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+
+# Streamlit Cloud runs this file from the dashboard directory. Add the project
+# root so sibling packages (automation, database, etc.) resolve consistently.
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from automation.jira_integration import JiraIntegration
 from automation.notifications import NotificationService
@@ -18,9 +25,6 @@ from recommendation.solution_engine import recommend_solutions
 from incident_processing.processor import IncidentProcessor
 
 st.set_page_config(page_title="Incident Intelligence", page_icon="📊", layout="wide")
-
-ROOT = Path(__file__).resolve().parent.parent
-
 
 @st.cache_resource
 def get_db() -> DBManager:
